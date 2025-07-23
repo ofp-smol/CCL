@@ -1,4 +1,4 @@
-const CACHE_NAME = 'claude-conversation-logger-v1';
+const CACHE_NAME = 'claude-conversation-logger-v2';
 const urlsToCache = [
   '/CCL/',
   '/CCL/index.html',
