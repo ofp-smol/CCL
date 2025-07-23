@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Claude Conversation Logger</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <style>
         * {
             margin: 0;
@@ -331,7 +332,17 @@
     </div>
 
     <script>
-        let conversations = JSON.parse(localStorage.getItem('claudeConversations') || '[]');
+        let conversations = [];
+        
+        // Try to load from localStorage, but handle errors gracefully
+        try {
+            const stored = localStorage.getItem('claudeConversations');
+            if (stored) {
+                conversations = JSON.parse(stored);
+            }
+        } catch (error) {
+            console.log('localStorage not available, using memory storage');
+        }
         let currentTags = [];
 
         function updateStats() {
@@ -414,7 +425,13 @@
             };
             
             conversations.unshift(conversation);
-            localStorage.setItem('claudeConversations', JSON.stringify(conversations));
+            
+            // Try to save to localStorage, but continue if it fails
+            try {
+                localStorage.setItem('claudeConversations', JSON.stringify(conversations));
+            } catch (error) {
+                console.log('Could not save to localStorage, data will be lost on refresh');
+            }
             
             // Clear form
             document.getElementById('title').value = '';
